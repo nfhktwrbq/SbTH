@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.thmlf.th.UsersTbEntity" table="users_tb" schema="public" catalog="sbth">
+        <id name="userId">
+            <column name="user_id" sql-type="integer"/>
+        </id>
+        <property name="firstName">
+            <column name="first_name" sql-type="varchar(40)" length="40"/>
+        </property>
+        <property name="lastName">
+            <column name="last_name" sql-type="varchar(40)" length="40"/>
+        </property>
+        <property name="gender">
+            <column name="gender" sql-type="varchar(40)" length="40"/>
+        </property>
+        <property name="married">
+            <column name="married" sql-type="boolean"/>
+        </property>
+        <property name="profile">
+            <column name="profile" sql-type="varchar(40)" length="40"/>
+        </property>
+        <property name="regDate">
+            <column name="reg_date" sql-type="date" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{app.title}"> Title </title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+<h1 th:text="#{app.user-show}">Details</h1>
+<table>
+    <tr>
+        <th th:text="#{user.firstname}"></th>
+        <th th:text="#{user.lastname}"></th>
+        <th th:text="#{user.gender}"></th>
+        <th th:text="#{user.married}+ '?'"></th>
+        <th th:text="#{user.profile}"></th>
+        <th th:text="#{user.regdate}"></th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.firstName}">Id</td>
+        <td th:text="${user.lastName}">Title</td>
+        <td th:text="${user.gender}">Gender</td>
+        <td th:text="${user.married}">Married</td>
+        <td th:text="${user.profile}">Profile</td>
+        <td th:text="${user.regDate}">Profile</td>
+    </tr>
+</table>
+<a href="#" th:href="@{/app/create-user}" th:text="#{user.add-more-users}">Add User</a>
+</body>
+</html>
