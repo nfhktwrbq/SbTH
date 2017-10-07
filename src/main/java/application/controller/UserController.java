@@ -1,5 +1,7 @@
-package com.thmlf.th;
+package application.controller;
 
+import application.persistance.User;
+import application.service.UserService;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,68 +15,56 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
 @RequestMapping("app")
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private UserService userService;
+
     @GetMapping("create-user")
     public ModelAndView createUserView() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("user-creation");
-        mav.addObject("usersTbEntity", new UsersTbEntity());
+        mav.addObject("usersTbEntity", new User());
         mav.addObject("allProfiles", getProfiles());
         return mav;
     }
+
     @PostMapping("create-user")
-    public ModelAndView createUser(@Valid UsersTbEntity usersTbEntity, BindingResult result) {
+    public ModelAndView createUser(@Valid User user, BindingResult result) {
         ModelAndView mav = new ModelAndView();
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             logger.info("Validation errors while submitting form.");
             mav.setViewName("user-creation");
-            mav.addObject("usersTbEntity", usersTbEntity);
+            mav.addObject("usersTbEntity", user);
             mav.addObject("allProfiles", getProfiles());
             return mav;
         }
-        userService.addUser(usersTbEntity);
-        Session session = HibernateSessionFactory.getSessionFactory().openSession();
-        session.beginTransaction();
-
-        /*UsersTbEntity contactEntity = new UsersTbEntity();
-        //contactEntity.setRegDate(new java.util.Date());
-        contactEntity.setFirstName("qqq");
-        contactEntity.setLastName("VN");
-        contactEntity.setMarried(true);
-        contactEntity.setProfile("Dev");
-        contactEntity.setGender("Male");
-        session.save(contactEntity);*/
-
-        usersTbEntity.setRegDate(new java.util.Date());
-        session.save(usersTbEntity);
-        session.getTransaction().commit();
-        session.close();
-        mav.addObject("allUsers", userService.getAllUserArticles());
+        user.setRegDate(new Date());
+        userService.save(user);
+        mav.addObject("allUsers", userService.findAll());
         mav.setViewName("user-info");
         logger.info("Form submitted successfully.");
         return mav;
     }
+
     @GetMapping("show-users")
     public ModelAndView showUsersView() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("user-all");
-        Session session = HibernateSessionFactory.getSessionFactory().openSession();
-        session.beginTransaction();
-        List<UsersTbEntity> ueList = session.createQuery("from UsersTbEntity").list();
-        for (UsersTbEntity ent : ueList) {
+        List<User> ueList = userService.findAll();
+        for (User ent : ueList) {
             logger.info(ent.getFirstName());
         }
         mav.addObject("users", ueList);
-        session.close();
         return mav;
     }
+
     private List<String> getProfiles() {
         List<String> list = new ArrayList<>();
         list.add("Developer");
