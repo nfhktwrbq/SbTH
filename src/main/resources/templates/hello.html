@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<h1 id="helloUser" th:inline="text" class="custom-modal">[[${#httpServletRequest.remoteUser}]]</h1>
+<h1 id="helloUserShow" th:inline="text" th:text="#{hello.hello}" class="custom-modal"></h1>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <!--div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Error</h4>
+            </div-->
+            <div class="modal-body">
+                <p class="modal-body-str1"> </p>
+                <p class="modal-body-str2"> </p>
+                <p class="modal-body-str3"> </p>
+                <p class="modal-body-str4"> </p>
+                <p class="modal-body-str5"> </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form th:action="@{/app/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+<div sec:authorize="hasAuthority('ADMIN')">
+    <form  th:action="@{/app/create-user}">
+        <input type="submit" th:value="#{hello.add}"/>
+    </form>
+    <form  th:action="@{/app/show-users}">
+        <input type="submit" th:value="#{user.show-users}"/>
+    </form>
+</div>
+
+<script>
+   document.getElementById("helloUser").hidden = true;
+    var user = $("#helloUser").text();
+    var hello = $("#helloUserShow").text();
+   var helloSrt =  hello.concat(user).concat("!");
+
+   //helloSrt.concat("!");
+   $("#helloUserShow").text(helloSrt);
+
+  $(function(){
+      $('.custom-modal').click(function(e){
+          e.preventDefault();
+          var mymodal = $('#myModal');
+
+          $.ajax({
+              url : 'getUser',
+              type: 'GET',
+              dataType: 'json',
+              contentType: 'application/json',
+              mimeType: 'application/json',
+              data : ({
+                  userName: user
+              }),
+              success: function (data) {
+                  mymodal.find('.modal-body-str1').text('Name: ' + data.firstName + ' ' +data.lastName );
+                  mymodal.find('.modal-body-str2').text('Gender: ' +data.gender );
+                  mymodal.find('.modal-body-str3').text('Married?: ' +data.married );
+                  mymodal.find('.modal-body-str4').text('Profile: ' +data.profile);
+                  mymodal.find('.modal-body-str5').text('Reg Date: ' +(new Date(data.regDate)).toString() );
+                  mymodal.modal('show');
+              }
+          });
+
+
+
+      });
+  })
+
+</script>
+</body>
+</html>

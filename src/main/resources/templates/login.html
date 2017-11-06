@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title> Spring Boot MVC Security using Thymeleaf </title>
+    <!--link rel="stylesheet" th:href="@{/css/styles.css}"/-->
+</head>
+<body>
+<div th:if="${param.error}">
+    Invalid username and password.
+</div>
+<div th:if="${param.logout}">
+    You have been logged out.
+</div>
+<h3> Spring Boot MVC Security using Thymeleaf </h3>
+<p th:if="${param.error}" class="error">
+    Bad Credentials
+</p>
+<form th:action="@{/app/login}" method="post">
+    <table>
+        <tr><td th:text="#{login.username}"></td>
+            <td>
+                <input type="text" name="username"/>
+                <!--label th:if="${#fields.hasErrors('username')}" th:text="#{error.user.firstname}" th:class="'error'">First Name Error</label-->
+            </td>
+        </tr>
+        <tr><td th:text="#{login.password}"></td>
+            <td>
+                <input type="password" name="password"/>
+                <!--label-- th:if="${#fields.hasErrors('password')}" th:text="#{error.user.firstname}" th:class="'error'">First Name Error</label-->
+            </td>
+        </tr>
+    </table>
+    <input type="submit" th:value="#{login.login}"/>
+</form>
+<form th:action="@{/app/create-user}">
+    <input type="submit" th:href="@{/app/create-user}" th:value="#{login.sign.up}"/>
+</form >
+
+</body>
+</html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title th:text="#{app.title}"> Title </title>
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
@@ -8,6 +9,24 @@
 <h1 th:text="#{app.create-user}">Create</h1>
 <form action="#" th:action="@{/app/create-user}" th:object="${usersTbEntity}" method="POST">
     <table>
+        <tr><td th:text="#{user.username}"></td>
+            <td>
+                <input type="text" th:field="*{username}" />
+                <label th:if="${#fields.hasErrors('username')}" th:text="#{error.user.username}" th:class="'error'">UserName Error</label>
+            </td>
+        </tr>
+        <tr><td th:text="#{user.password}"></td>
+            <td>
+                <input type="text" th:field="*{password}" />
+                <label th:if="${#fields.hasErrors('password')}" th:text="#{error.user.password}" th:class="'error'">Password Error</label>
+            </td>
+        </tr>
+        <tr sec:authorize="hasAuthority('ADMIN')"><td th:text="#{user.role}"></td>
+            <td>
+                <input type="text" th:field="*{role}" />
+                <label th:if="${#fields.hasErrors('role')}" th:text="#{error.user.role}" th:class="'error'">Role Error</label>
+            </td>
+        </tr>
         <tr><td th:text="#{user.firstname}"></td>
             <td>
                 <input type="text" th:field="*{firstName}" />

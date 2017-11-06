@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title th:text="#{app.title}"> Title </title>
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
@@ -24,6 +25,8 @@
         <td th:text="${user.regDate}">Profile</td>
     </tr>
 </table>
-<a href="#" th:href="@{/app/create-user}" th:text="#{user.add-more-users}">Add User</a>
+<div sec:authorize="hasAuthority('ADMIN')">
+    <a href="#" th:href="@{/app/create-user}" th:text="#{user.add-more-users}">Add User</a>
+</div>
 </body>
 </html>

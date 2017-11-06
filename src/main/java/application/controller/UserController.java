@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 @Controller
 @RequestMapping("app")
 public class UserController {
@@ -35,6 +38,27 @@ public class UserController {
         return mav;
     }
 
+    @GetMapping("login")
+    public ModelAndView loginView() {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("login");
+        return mav;
+    }
+
+    @GetMapping("/")
+    public ModelAndView firstView() {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("hello");
+        return mav;
+    }
+
+    @GetMapping("/hello")
+    public ModelAndView helloView() {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("hello");
+        return mav;
+    }
+
     @PostMapping("create-user")
     public ModelAndView createUser(@Valid User user, BindingResult result) {
         ModelAndView mav = new ModelAndView();
@@ -44,6 +68,9 @@ public class UserController {
             mav.addObject("usersTbEntity", user);
             mav.addObject("allProfiles", getProfiles());
             return mav;
+        }
+        if("".equals(user.getRole())){
+            user.setRole("USER");
         }
         user.setRegDate(new Date());
         userService.save(user);
@@ -71,5 +98,11 @@ public class UserController {
         list.add("Manager");
         list.add("Director");
         return list;
+    }
+
+    @GetMapping("/getUser")
+    public @ResponseBody User getUser(@RequestParam String userName) {
+
+        return userService.findUserByName(userName);
     }
 }

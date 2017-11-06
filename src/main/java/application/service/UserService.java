@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface UserService extends BaseService<User, Long> {
 
+    public User findUserByName(String name);
+
 }
